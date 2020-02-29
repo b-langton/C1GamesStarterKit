@@ -20,7 +20,7 @@ Advanced strategy tips:
 """
 
 class AlgoStrategy(gamelib.AlgoCore):
-    pmiddle_dict = {}
+    pmid_dict = {}
     ptop_left_dict = {}
     ptop_right_dict = {}
     def __init__(self):
@@ -117,16 +117,16 @@ class AlgoStrategy(gamelib.AlgoCore):
                      if self.ptop_right_dict[(x,y)] != None: 
                         self.ptop_right_dict[(x,y)] = self.ptop_right_dict[(x,y)] - hp
                         temp_right[(x,y)] = hp
-                sumleft = self.sum(ptop_left_dict)
-                summmid = self.sum(pmid_dict)
-                sumright = self.sum(ptop_right_dict)
+                sumleft = self.sum(self.ptop_left_dict)
+                summid = self.sum(self.pmid_dict)
+                sumright = self.sum(self.ptop_right_dict)
 
                 self.pmid_dict = temp_mid
                 self.ptop_right_dict = temp_right
                 self.ptop_left_dict = temp_left
-                if summright>= summid and sumright >= sumleft:
+                if sumright>= summid and sumright >= sumleft:
                     return "top_right"
-                if summid >= summleft and summid >= sumright: 
+                if summid >= sumleft and summid >= sumright: 
                     return "mid"
                 else:
                     return "top_left"
