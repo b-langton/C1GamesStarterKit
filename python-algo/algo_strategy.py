@@ -124,7 +124,7 @@ class AlgoStrategy(gamelib.AlgoCore):
                 self.pmid_dict = temp_mid
                 self.ptop_right_dict = temp_right
                 self.ptop_left_dict = temp_left
-                gamelib.debug_write(summid, sumright, sumleft)
+                gamelib.debug_write(temp_left.keys(), temp_left.values())
 
                 if sumright > summid and sumright > sumleft:
                     gamelib.debug_write("top_right")
