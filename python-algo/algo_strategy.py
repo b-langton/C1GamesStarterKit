@@ -133,7 +133,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         gamelib.debug_write(temp_left.keys(), temp_left.values())
         gamelib.debug_write(sumleft, summid, sumright)
 
-        if sumright > summid and sumright > sumleft and summid > 0:
+        if sumright > summid and sumright > sumleft and sumright > 0:
             gamelib.debug_write("top_right")
             self.last_adapted = "top_right"
             return "top_right"
@@ -150,17 +150,30 @@ class AlgoStrategy(gamelib.AlgoCore):
 
        
     def adapt(self, area,  game_state): 
+        if game_state.get_resource(CORES)<=5:
+            return
         if area == "no damage taken":
             area = self.last_adapted
         if area == "top_left": 
             locations = [[2, 12], [4, 12], [1, 12], [4, 11], [5, 11], [7, 11]]
+            filter_locations = [[6,11], [7,10], [8,9]]
+            
             game_state.attempt_spawn(DESTRUCTOR, locations, 2)
+            for i in filter_locations: 
+                game_state.attempt_spawn(FILTER, [i])
+                game_state.attempt_upgrade([i])
         if area == "middle": 
+            filter_locations = [[9,8], [10,7], [11,6], [12,5]]
             locations = [[7, 11], [8, 8], [9, 7], [10, 6], [11, 5], [12, 4]]
             game_state.attempt_spawn(DESTRUCTOR, locations, 2)
+            game_state.attempt_upgrade(filter_locations)
         if area == "top_right": 
+            filter_locations = [[24,13], [23,13], [22,11], [23,12], [21,10]]
             locations = [[23, 12], [24, 12], [23, 11], [22, 10], [22, 9]]
             game_state.attempt_spawn(DESTRUCTOR, locations, 2)
+            for i in filter_locations: 
+                game_state.attempt_spawn(FILTER, [i])
+                game_state.attempt_upgrade([i])
 
        
 
