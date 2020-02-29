@@ -124,11 +124,16 @@ class AlgoStrategy(gamelib.AlgoCore):
                 self.pmid_dict = temp_mid
                 self.ptop_right_dict = temp_right
                 self.ptop_left_dict = temp_left
+                gamelib.debug_write(summid, sumright, sumleft)
+
                 if sumright > summid and sumright > sumleft:
+                    gamelib.debug_write("top_right")
                     return "top_right"
                 if summid > sumleft and summid > sumright: 
+                    gamelib.debug_write("mid")
                     return "mid"
                 else:
+                    gamelib.debug_write("top_right")
                     return "top_left"
                      
 
@@ -185,9 +190,7 @@ class AlgoStrategy(gamelib.AlgoCore):
             game_state.attempt_spawn(ENCRYPTOR, encryptor_locations)
         gamelib.debug_write(game_state._build_stack, game_state._deploy_stack)
       
-    def reinforce_defences(self, game_state): 
-        locations = [[2, 11], [24, 11], [2, 11]]
-        game_state.attempt_spawn(DESTRUCTOR, locations)
+    
 
     def build_defences(self, game_state):
         """
