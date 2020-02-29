@@ -230,6 +230,7 @@ class AlgoStrategy(gamelib.AlgoCore):
                     game_state.attempt_spawn(FILTER, [loc])
 
         if len(self.filters_to_upgrade) > 0:
+            self.filters_to_upgrade.sort(key=lambda t: t[1])
             game_state.attempt_upgrade(self.filters_to_upgrade)
 
         upgrade_locations = [[1, 13], [25, 13], [26, 13], [27, 13], [5, 12]]
