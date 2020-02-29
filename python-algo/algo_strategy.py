@@ -137,9 +137,21 @@ class AlgoStrategy(gamelib.AlgoCore):
         game_state.attempt_upgrade(upgrade_locations)
 
     def build_offenses(self, game_state):
+        if game_state.turn_number == 0:
+            return
+
         encryptors_locations = [[6, 10], [7, 9], [8, 8], [9, 7], [10, 6], [11, 5]]
 
         game_state.attempt_spawn(ENCRYPTOR, encryptors_locations)
+
+        bits = game_state.get_resources(BITS, 0)
+        num_spawns = bits // 4
+
+        emp_locations = [[10, 3], [12, 1], [14, 0]]
+        ping_locations = [[9, 4], [11, 2], [13, 0]]
+        
+        game_state.attempt_spawn(EMP, emp_locations[:num_spawns])
+        game_state.attempt_spawn(PING, ping_locations[:num_spawns])
 
     def build_reactive_defense(self, game_state):
         """
