@@ -20,6 +20,9 @@ Advanced strategy tips:
 """
 
 class AlgoStrategy(gamelib.AlgoCore):
+    pmiddle_dict = {}
+    ptop_left_dict = {}
+    ptop_right_dict = {}
     def __init__(self):
         super().__init__()
         seed = random.randrange(maxsize)
@@ -70,8 +73,79 @@ class AlgoStrategy(gamelib.AlgoCore):
     """
 
     def v_strategy(self, game_state):
+        state = json.loads(game_state.serialized_string)
+        p1units = state["p1Units"]
         self.build_defences(game_state)
+        self.reinforce_defences(game_state)
+        gamelib.debug_write(str(p1units))
+        area = self.figure_out_attacked(game_state, p1units)
+        self.adapt(area, game_state)
         self.build_offenses(game_state)
+
+    def reinforce_defences(self, game_state): 
+        locations = [[2, 11], [24, 11], [3, 10]]
+        game_state.attempt_spawn(DESTRUCTOR, locations)
+    
+    def sum(self, d):
+        sum1 = 0 
+        for num in d:
+            sum1 += int(num)
+        return num
+    def figure_out_attacked(self, game_state, units): 
+        for i, unit_types in enumerate(units):
+            temp_right = {}
+            temp_mid = {}
+            temp_left = {}
+            for uinfo in unit_types:
+                unit_type = typedef[i].get("shorthand")
+                sx, sy, shp = uinfo[:3]
+                x, y = map(int, [sx, sy])
+                hp = float(shp)
+                # This depends on RM and UP always being the last types to be processed
+                if x <= 9: 
+                    if self.ptop_left_dict[(x,y)] != None: 
+                        self.ptop_left_dict[(x,y)] = self.ptop_left_dict[(x,y)] - hp
+                        temp_left[(x,y)] = hp
+                
+                else if x> 9 and x <= 18:
+                    if self.pmid_dict[(x,y)] != None: 
+                            self.pmid_dict[(x,y)] = self.pmid_dict[(x,y)] - hp
+                            temp_mid[(x,y)] = hp
+
+                else: 
+                     if self.ptop_right_dict[(x,y)] != None: 
+                        self.ptop_right_dict[(x,y)] = self.ptop_right_dict[(x,y)] - hp
+                        temp_right[(x,y)] = hp
+                sumleft = self.sum(ptop_left_dict)
+                summmid = self.sum(pmid_dict)
+                sumright = self.sum(ptop_right_dict)
+
+                self.pmid_dict = temp_mid
+                self.ptop_right_dict = temp_right
+                self.ptop_left_dict = temp_left
+                if summright>= summid and sumright >= sumleft:
+                    return "top_right"
+                if summid >= summleft and summid >= sumright: 
+                    return "mid"
+                else:
+                    return "top_left"
+                     
+
+                    
+        return "top_left"
+    def adapt(self, area,  game_state): 
+        if area == "top_left": 
+            locations = [[2, 12], [4, 12], [2, 11], [4, 11], [5, 11], [7, 11]]
+            game_state.attempt_spawn(DESTRUCTOR, locations, 2)
+        if area == "middle": 
+            locations = [[7, 11], [8, 8], [9, 7], [10, 6], [11, 5], [12, 4]]
+            game_state.attempt_spawn(DESTRUCTOR, locations, 2)
+        if area == "top_right": 
+            locations = [[23, 12], [24, 12], [23, 11], [22, 10], [22, 9]]
+            game_state.attempt_spawn(DESTRUCTOR, locations, 2)
+
+       
+
     def starter_strategy(self, game_state):
         
         """
@@ -110,7 +184,7 @@ class AlgoStrategy(gamelib.AlgoCore):
             game_state.attempt_spawn(ENCRYPTOR, encryptor_locations)
         gamelib.debug_write(game_state._build_stack, game_state._deploy_stack)
       
-    def reinforce_defences(self, game_state, locations): 
+    def reinforce_defences(self, game_state): 
         locations = [[2, 11], [24, 11], [3, 10]]
         game_state.attempt_spawn(DESTRUCTOR, locations)
 
@@ -123,12 +197,12 @@ class AlgoStrategy(gamelib.AlgoCore):
         # More community tools available at: https://terminal.c1games.com/rules#Download
 
         # Place destructors that attack enemy units
-        destructor_locations = [[0, 13], [3, 12], [25, 12], [26, 12], [4, 11]]
+        destructor_locations = [[0, 13], [3, 12], [25, 12], [26, 12], [4, 12]]
         # attempt_spawn will try to spawn units if we have resources, and will check if a blocking unit is already there
         game_state.attempt_spawn(DESTRUCTOR, destructor_locations)
         
         # Place filters in front of destructors to soak up damage for them
-        filter_locations = [[1, 13], [25, 13], [26, 13], [27, 13], [4, 12], [5, 11], [25, 11], [6, 10], [24, 10], [7, 9], [23, 9], [8, 8], [22, 8], [9, 7], [21, 7], [10, 6], [20, 6], [11, 5], [19, 5], [12, 4], [18, 4], [13, 3], [17, 3], [14, 2], [15, 2], [16, 2]]
+        filter_locations = [[1, 13], [25, 13], [26, 13], [27, 13], [5, 12], [6, 11], [25, 11], [7, 10], [24, 10], [8, 9], [23, 9], [9, 8], [22, 8], [10, 7], [21, 7], [11, 6], [20, 6], [12, 5], [19, 5], [13, 4], [18, 4], [14, 3], [17, 3], [15, 2], [16, 2]]
         game_state.attempt_spawn(FILTER, filter_locations)
 
         upgrade_locations = [[1, 13], [25, 13], [26, 13], [27, 13], [5, 12]]
