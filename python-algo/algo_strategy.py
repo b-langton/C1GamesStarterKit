@@ -92,13 +92,13 @@ class AlgoStrategy(gamelib.AlgoCore):
             sum1 += int(num)
         return sum1
     def figure_out_attacked(self, game_state, units): 
-        typedef = self.config.get("unitInformation")
+        
         for i, unit_types in enumerate(units):
             temp_right = {}
             temp_mid = {}
             temp_left = {}
             for uinfo in unit_types:
-                unit_type = typedef[i].get("shorthand")
+                
                 sx, sy, shp = uinfo[:3]
                 x, y = map(int, [sx, sy])
                 hp = float(shp)
@@ -124,11 +124,16 @@ class AlgoStrategy(gamelib.AlgoCore):
                 self.pmid_dict = temp_mid
                 self.ptop_right_dict = temp_right
                 self.ptop_left_dict = temp_left
-                if sumright>= summid and sumright >= sumleft:
+                gamelib.debug_write(summid, sumright, sumleft)
+
+                if sumright > summid and sumright > sumleft:
+                    gamelib.debug_write("top_right")
                     return "top_right"
-                if summid >= sumleft and summid >= sumright: 
+                if summid > sumleft and summid > sumright: 
+                    gamelib.debug_write("mid")
                     return "mid"
                 else:
+                    gamelib.debug_write("top_right")
                     return "top_left"
                      
 
@@ -185,9 +190,7 @@ class AlgoStrategy(gamelib.AlgoCore):
             game_state.attempt_spawn(ENCRYPTOR, encryptor_locations)
         gamelib.debug_write(game_state._build_stack, game_state._deploy_stack)
       
-    def reinforce_defences(self, game_state): 
-        locations = [[2, 11], [24, 11], [2, 11]]
-        game_state.attempt_spawn(DESTRUCTOR, locations)
+    
 
     def build_defences(self, game_state):
         """
