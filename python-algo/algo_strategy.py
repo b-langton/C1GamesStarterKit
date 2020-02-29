@@ -90,7 +90,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         sum1 = 0 
         for num in d:
             sum1 += int(num)
-        return num
+        return sum1
     def figure_out_attacked(self, game_state, units): 
         
         for i, unit_types in enumerate(units):
@@ -104,17 +104,17 @@ class AlgoStrategy(gamelib.AlgoCore):
                 hp = float(shp)
                 # This depends on RM and UP always being the last types to be processed
                 if x <= 9: 
-                    if self.ptop_left_dict[(x,y)] != None: 
+                    if (x,y) in self.ptop_left_dict: 
                         self.ptop_left_dict[(x,y)] = self.ptop_left_dict[(x,y)] - hp
                         temp_left[(x,y)] = hp
                 
                 elif x> 9 and x <= 18:
-                    if self.pmid_dict[(x,y)] != None: 
+                    if (x,y) in self.pmid_dict: 
                             self.pmid_dict[(x,y)] = self.pmid_dict[(x,y)] - hp
                             temp_mid[(x,y)] = hp
 
                 else: 
-                     if self.ptop_right_dict[(x,y)] != None: 
+                     if (x,y) in self.ptop_right_dict:
                         self.ptop_right_dict[(x,y)] = self.ptop_right_dict[(x,y)] - hp
                         temp_right[(x,y)] = hp
                 sumleft = self.sum(self.ptop_left_dict)
@@ -136,7 +136,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         return "top_left"
     def adapt(self, area,  game_state): 
         if area == "top_left": 
-            locations = [[2, 12], [4, 12], [2, 11], [4, 11], [5, 11], [7, 11]]
+            locations = [[2, 12], [4, 12], [1, 12], [4, 11], [5, 11], [7, 11]]
             game_state.attempt_spawn(DESTRUCTOR, locations, 2)
         if area == "middle": 
             locations = [[7, 11], [8, 8], [9, 7], [10, 6], [11, 5], [12, 4]]
@@ -186,7 +186,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         gamelib.debug_write(game_state._build_stack, game_state._deploy_stack)
       
     def reinforce_defences(self, game_state): 
-        locations = [[2, 11], [24, 11], [3, 10]]
+        locations = [[2, 11], [24, 11], [2, 11]]
         game_state.attempt_spawn(DESTRUCTOR, locations)
 
     def build_defences(self, game_state):
@@ -198,7 +198,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         # More community tools available at: https://terminal.c1games.com/rules#Download
 
         # Place destructors that attack enemy units
-        destructor_locations = [[0, 13], [3, 12], [25, 12], [26, 12], [4, 12]]
+        destructor_locations = [[0, 13], [2, 12], [25, 12], [26, 12], [4, 12]]
         # attempt_spawn will try to spawn units if we have resources, and will check if a blocking unit is already there
         game_state.attempt_spawn(DESTRUCTOR, destructor_locations)
         
@@ -215,7 +215,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         if game_state.turn_number == 0:
             return
 
-        encryptors_locations = [[5, 10], [6, 9], [7, 8], [8, 7], [9, 6], [10, 5]]
+        encryptors_locations = [[5, 10], [6, 9], [7, 8], [8, 8], [8, 7], [9, 7], [9, 6], [10, 6], [10, 5], [11, 5], [11, 4], [12, 4]]
 
         game_state.attempt_spawn(ENCRYPTOR, encryptors_locations)
 
