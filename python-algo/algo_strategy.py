@@ -145,7 +145,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         game_state.attempt_spawn(ENCRYPTOR, encryptors_locations)
 
         bits = game_state.get_resource(BITS, 0)
-        num_spawns = bits // 4
+        num_spawns = int(bits // 4)
 
         emp_locations = [[10, 3], [12, 1], [14, 0]]
         ping_locations = [[9, 4], [11, 2], [13, 0]]
