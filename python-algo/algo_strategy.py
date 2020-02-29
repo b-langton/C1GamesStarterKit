@@ -217,6 +217,7 @@ class AlgoStrategy(gamelib.AlgoCore):
     def build_offenses(self, game_state):
         if game_state.turn_number == 0:
             game_state.attempt_spawn(SCRAMBLER, [[16, 2]])
+            game_state.attempt_spawn(PING, [[16, 2]])
             return
         
         if game_state.get_resource(BITS, 1) >= 10:
