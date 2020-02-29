@@ -107,7 +107,7 @@ class AlgoStrategy(gamelib.AlgoCore):
                         self.ptop_left_dict[(x,y)] = self.ptop_left_dict[(x,y)] - hp
                         temp_left[(x,y)] = hp
                 
-                else if x> 9 and x <= 18:
+                elif x> 9 and x <= 18:
                     if self.pmid_dict[(x,y)] != None: 
                             self.pmid_dict[(x,y)] = self.pmid_dict[(x,y)] - hp
                             temp_mid[(x,y)] = hp
