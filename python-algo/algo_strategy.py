@@ -110,9 +110,8 @@ class AlgoStrategy(gamelib.AlgoCore):
         gamelib.debug_write(game_state._build_stack, game_state._deploy_stack)
       
     def reinforce_defences(self, game_state, locations): 
-        num_build = int((game_state.get_resource(game_state.CORES) - 8)//6)
-        game_state.attempt_spawn(DESTRUCTOR, locations, num_build)
-
+        locations = [[2, 11], [24, 11], [3, 10]]
+        game_state.attempt_spawn(DESTRUCTOR, locations)
 
     def build_defences(self, game_state):
         """
