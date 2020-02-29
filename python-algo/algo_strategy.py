@@ -136,7 +136,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         return "top_left"
     def adapt(self, area,  game_state): 
         if area == "top_left": 
-            locations = [[2, 12], [4, 12], [2, 11], [4, 11], [5, 11], [7, 11]]
+            locations = [[2, 12], [4, 12], [1, 12], [4, 11], [5, 11], [7, 11]]
             game_state.attempt_spawn(DESTRUCTOR, locations, 2)
         if area == "middle": 
             locations = [[7, 11], [8, 8], [9, 7], [10, 6], [11, 5], [12, 4]]
@@ -186,7 +186,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         gamelib.debug_write(game_state._build_stack, game_state._deploy_stack)
       
     def reinforce_defences(self, game_state): 
-        locations = [[2, 11], [24, 11], [3, 10]]
+        locations = [[2, 11], [24, 11], [2, 11]]
         game_state.attempt_spawn(DESTRUCTOR, locations)
 
     def build_defences(self, game_state):
@@ -198,7 +198,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         # More community tools available at: https://terminal.c1games.com/rules#Download
 
         # Place destructors that attack enemy units
-        destructor_locations = [[0, 13], [3, 12], [25, 12], [26, 12], [4, 12]]
+        destructor_locations = [[0, 13], [2, 12], [25, 12], [26, 12], [4, 12]]
         # attempt_spawn will try to spawn units if we have resources, and will check if a blocking unit is already there
         game_state.attempt_spawn(DESTRUCTOR, destructor_locations)
         
