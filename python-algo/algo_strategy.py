@@ -219,7 +219,14 @@ class AlgoStrategy(gamelib.AlgoCore):
         
         # Place filters in front of destructors to soak up damage for them
         filter_locations = [[1, 13], [25, 13], [26, 13], [27, 13], [5, 12], [6, 11], [25, 11], [7, 10], [24, 10], [8, 9], [23, 9], [9, 8], [22, 8], [10, 7], [21, 7], [11, 6], [20, 6], [12, 5], [19, 5], [13, 4], [18, 4], [14, 3], [17, 3], [15, 2], [16, 2]]
-        game_state.attempt_spawn(FILTER, filter_locations)
+        if game_state.turn_number < 2:
+            game_state.attempt_spawn(FILTER, filter_locations)
+        else:
+            # replace any deleted filters with upgraded filters
+            for loc in filter_locations:
+                if game_state.can_spawn(FILTER, loc):
+                    game_state.attempt_spawn(FILTER, [loc])
+                    game_state.attempt_upgrade([loc])
 
         upgrade_locations = [[1, 13], [25, 13], [26, 13], [27, 13], [5, 12]]
       
