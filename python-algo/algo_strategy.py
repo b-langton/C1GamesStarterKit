@@ -28,6 +28,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         seed = random.randrange(maxsize)
         random.seed(seed)
         gamelib.debug_write('Random seed: {}'.format(seed))
+        self.previous_game_states = {}
 
     def on_game_start(self, config):
         """ 
@@ -47,9 +48,6 @@ class AlgoStrategy(gamelib.AlgoCore):
         # This is a good place to do initial setup
         self.scored_on_locations = []
 
-    
-        
-
     def on_turn(self, turn_state):
         """
         This function is called every turn with the game state wrapper as
@@ -61,6 +59,8 @@ class AlgoStrategy(gamelib.AlgoCore):
         game_state = gamelib.GameState(self.config, turn_state)
         gamelib.debug_write('Performing turn {} of your custom algo strategy'.format(game_state.turn_number))
         game_state.suppress_warnings(True)  #Comment or remove this line to enable warnings.
+
+        self.previous_game_states[game_state.turn_number] = game_state
 
         self.v_strategy(game_state)
 
@@ -80,6 +80,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         gamelib.debug_write(str(p1units))
         area = self.figure_out_attacked(game_state, p1units)
         self.adapt(area, game_state)
+        self.build_offenses(game_state)
 
     def reinforce_defences(self, game_state): 
         locations = [[2, 11], [24, 11], [3, 10]]
@@ -142,6 +143,9 @@ class AlgoStrategy(gamelib.AlgoCore):
         if area == "top_right": 
             locations = [[23, 12], [24, 12], [23, 11], [22, 10], [22, 9]]
             game_state.attempt_spawn(DESTRUCTOR, locations, 2)
+
+       
+
     def starter_strategy(self, game_state):
         
         """
@@ -205,6 +209,23 @@ class AlgoStrategy(gamelib.AlgoCore):
       
         # upgrade filters so they soak more damage
         game_state.attempt_upgrade(upgrade_locations)
+
+    def build_offenses(self, game_state):
+        if game_state.turn_number == 0:
+            return
+
+        encryptors_locations = [[5, 10], [6, 9], [7, 8], [8, 7], [9, 6], [10, 5]]
+
+        game_state.attempt_spawn(ENCRYPTOR, encryptors_locations)
+
+        bits = game_state.get_resource(BITS, 0)
+        num_spawns = int(bits // 4)
+        if num_spawns >= 5:
+            emp_locations = [[14, 0]]
+            ping_locations = [[15, 1]]
+
+            game_state.attempt_spawn(PING, ping_locations * num_spawns)
+            game_state.attempt_spawn(EMP, emp_locations * num_spawns)
 
     def build_reactive_defense(self, game_state):
         """
