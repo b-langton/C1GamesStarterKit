@@ -92,13 +92,13 @@ class AlgoStrategy(gamelib.AlgoCore):
             sum1 += int(num)
         return num
     def figure_out_attacked(self, game_state, units): 
-        typedef = self.config.get("unitInformation")
+        
         for i, unit_types in enumerate(units):
             temp_right = {}
             temp_mid = {}
             temp_left = {}
             for uinfo in unit_types:
-                unit_type = typedef[i].get("shorthand")
+                
                 sx, sy, shp = uinfo[:3]
                 x, y = map(int, [sx, sy])
                 hp = float(shp)
@@ -124,9 +124,9 @@ class AlgoStrategy(gamelib.AlgoCore):
                 self.pmid_dict = temp_mid
                 self.ptop_right_dict = temp_right
                 self.ptop_left_dict = temp_left
-                if sumright>= summid and sumright >= sumleft:
+                if sumright > summid and sumright > sumleft:
                     return "top_right"
-                if summid >= sumleft and summid >= sumright: 
+                if summid > sumleft and summid > sumright: 
                     return "mid"
                 else:
                     return "top_left"
