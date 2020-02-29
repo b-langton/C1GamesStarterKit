@@ -108,7 +108,7 @@ class AlgoStrategy(gamelib.AlgoCore):
                         self.ptop_left_dict[(x,y)] = self.ptop_left_dict[(x,y)] - hp
                         temp_left[(x,y)] = hp
                 
-                else if x> 9 and x <= 18:
+                elif x> 9 and x <= 18:
                     if self.pmid_dict[(x,y)] != None: 
                             self.pmid_dict[(x,y)] = self.pmid_dict[(x,y)] - hp
                             temp_mid[(x,y)] = hp
@@ -220,12 +220,12 @@ class AlgoStrategy(gamelib.AlgoCore):
         game_state.attempt_spawn(ENCRYPTOR, encryptors_locations)
 
         bits = game_state.get_resource(BITS, 0)
-        num_spawns = int(bits // 4)
-        if num_spawns >= 5:
+        num_spawns = int(bits // 5)
+        if num_spawns >= 3:
             emp_locations = [[14, 0]]
             ping_locations = [[15, 1]]
 
-            game_state.attempt_spawn(PING, ping_locations * num_spawns)
+            game_state.attempt_spawn(PING, ping_locations * 2 * num_spawns)
             game_state.attempt_spawn(EMP, emp_locations * num_spawns)
 
     def build_reactive_defense(self, game_state):
