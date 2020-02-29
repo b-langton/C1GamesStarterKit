@@ -30,6 +30,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         random.seed(seed)
         gamelib.debug_write('Random seed: {}'.format(seed))
         self.previous_game_states = {}
+        self.filters_to_upgrade = []
 
     def on_game_start(self, config):
         """ 
@@ -225,8 +226,10 @@ class AlgoStrategy(gamelib.AlgoCore):
             # replace any deleted filters with upgraded filters
             for loc in filter_locations:
                 if game_state.can_spawn(FILTER, loc):
+                    self.filters_to_upgrade.append(loc)
                     game_state.attempt_spawn(FILTER, [loc])
-                    game_state.attempt_upgrade([loc])
+
+        game_state.attempt_upgrade(self.filters_to_upgrade)
 
         upgrade_locations = [[1, 13], [25, 13], [26, 13], [27, 13], [5, 12]]
       
