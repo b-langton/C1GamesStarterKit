@@ -88,7 +88,7 @@ class AlgoStrategy(gamelib.AlgoCore):
     
     def sum(self, d):
         sum1 = 0 
-        for num in d:
+        for num in d.values():
             sum1 += int(num)
         return sum1
     def figure_out_attacked(self, game_state, units): 
