@@ -83,7 +83,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         self.build_offenses(game_state)
 
     def reinforce_defences(self, game_state): 
-        locations = [[2, 11], [24, 11], [3, 10]]
+        locations = [[2, 11], [24, 11]]
         game_state.attempt_spawn(DESTRUCTOR, locations)
     
     def sum(self, d):
@@ -225,12 +225,13 @@ class AlgoStrategy(gamelib.AlgoCore):
         bits = game_state.get_resource(BITS, 0)
         num_spawns = int(bits // 5)
         if num_spawns >= 2:
+            ping_locations = [[15, 1]]
             if random.randint(0, 1) == 0:
                 emp_locations = [[14, 0]]
-                ping_locations = [[15, 1]]
+                # ping_locations = [[15, 1]]
             else:
                 emp_locations = [[12, 1]]
-                ping_locations = [[12, 1]]
+                # ping_locations = [[12, 1]]
             
             game_state.attempt_spawn(PING, ping_locations * 2 * num_spawns)
             game_state.attempt_spawn(EMP, emp_locations * num_spawns)
