@@ -217,6 +217,9 @@ class AlgoStrategy(gamelib.AlgoCore):
     def build_offenses(self, game_state):
         if game_state.turn_number == 0:
             return
+        
+        if game_state.get_resource(BITS, 1) >= 15:
+            game_state.attempt_spawn(SCRAMBLER, [[12, 1]])
 
         encryptors_locations = [[5, 10], [6, 9], [7, 8], [8, 8], [8, 7], [9, 7], [9, 6], [10, 6], [10, 5], [11, 5], [11, 4], [12, 4]]
 
@@ -230,8 +233,8 @@ class AlgoStrategy(gamelib.AlgoCore):
                 emp_locations = [[14, 0]]
                 # ping_locations = [[15, 1]]
             else:
-                emp_locations = [[12, 1]]
-                # ping_locations = [[12, 1]]
+                emp_locations = [[13, 0]]
+                # ping_locations = [[13, 0]]
             
             game_state.attempt_spawn(PING, ping_locations * 2 * num_spawns)
             game_state.attempt_spawn(EMP, emp_locations * num_spawns)
