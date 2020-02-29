@@ -215,7 +215,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         if game_state.turn_number == 0:
             return
 
-        encryptors_locations = [[5, 10], [6, 9], [7, 8], [8, 7], [9, 6], [10, 5]]
+        encryptors_locations = [[5, 10], [6, 9], [7, 8], [8, 8], [8, 7], [9, 7], [9, 6], [10, 6], [10, 5], [11, 5], [11, 4], [12, 4]]
 
         game_state.attempt_spawn(ENCRYPTOR, encryptors_locations)
 
