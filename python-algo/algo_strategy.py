@@ -229,6 +229,9 @@ class AlgoStrategy(gamelib.AlgoCore):
 
         bits = game_state.get_resource(BITS, 0)
         num_spawns = int(bits // 5)
+
+        reqd_spawns = 2 if game_state.get_resource(BITS, 1) >= 10 else 1
+        
         if num_spawns >= 2:
             ping_locations = [[15, 1]]
             if random.randint(0, 1) == 0:
