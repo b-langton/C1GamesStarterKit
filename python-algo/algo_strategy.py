@@ -90,7 +90,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         sum1 = 0 
         for num in d:
             sum1 += int(num)
-        return num
+        return sum1
     def figure_out_attacked(self, game_state, units): 
         typedef = self.config.get("unitInformation")
         for i, unit_types in enumerate(units):
