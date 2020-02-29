@@ -262,12 +262,7 @@ class AlgoStrategy(gamelib.AlgoCore):
 
         if num_spawns >= 2:
             ping_locations = [[15, 1]]
-            if random.randint(0, 1) == 0:
-                emp_locations = [[14, 0]]
-                # ping_locations = [[15, 1]]
-            else:
-                emp_locations = [[13, 0]]
-                # ping_locations = [[13, 0]]
+            emp_locations = [[13, 0]]
             
             game_state.attempt_spawn(PING, ping_locations * 2 * num_spawns)
             game_state.attempt_spawn(EMP, emp_locations * num_spawns)
