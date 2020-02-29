@@ -30,6 +30,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         random.seed(seed)
         gamelib.debug_write('Random seed: {}'.format(seed))
         self.previous_game_states = {}
+        self.filters_to_upgrade = []
 
     def on_game_start(self, config):
         """ 
@@ -232,7 +233,18 @@ class AlgoStrategy(gamelib.AlgoCore):
         
         # Place filters in front of destructors to soak up damage for them
         filter_locations = [[1, 13], [25, 13], [26, 13], [27, 13], [5, 12], [6, 11], [25, 11], [7, 10], [24, 10], [8, 9], [23, 9], [9, 8], [22, 8], [10, 7], [21, 7], [11, 6], [20, 6], [12, 5], [19, 5], [13, 4], [18, 4], [14, 3], [17, 3], [15, 2], [16, 2]]
-        game_state.attempt_spawn(FILTER, filter_locations)
+        if game_state.turn_number < 2:
+            game_state.attempt_spawn(FILTER, filter_locations)
+        else:
+            # replace any deleted filters with upgraded filters
+            for loc in filter_locations:
+                if game_state.can_spawn(FILTER, loc):
+                    self.filters_to_upgrade.append(loc)
+                    game_state.attempt_spawn(FILTER, [loc])
+
+        if len(self.filters_to_upgrade) > 0:
+            self.filters_to_upgrade.sort(key=lambda t: t[1])
+            game_state.attempt_upgrade(self.filters_to_upgrade)
 
         upgrade_locations = [[1, 13], [25, 13], [26, 13], [27, 13], [5, 12]]
       
@@ -242,15 +254,19 @@ class AlgoStrategy(gamelib.AlgoCore):
     def build_offenses(self, game_state):
         if game_state.turn_number == 0:
             game_state.attempt_spawn(SCRAMBLER, [[16, 2]])
-            game_state.attempt_spawn(PING, [[16, 2]])
+            game_state.attempt_spawn(PING, [[16, 2]]*4)
             return
         
         if game_state.get_resource(BITS, 1) >= 10:
             game_state.attempt_spawn(SCRAMBLER, [[6, 7]])
 
-        encryptors_locations = [[5, 10], [6, 9], [7, 8], [8, 8], [8, 7], [9, 7], [9, 6], [10, 6], [10, 5], [11, 5], [11, 4], [12, 4]]
+        encryptors_locations = [[5, 10], [6, 10], [6, 9], [7, 9], [7, 8], [8, 8], [8, 7], [9, 7], [9, 6], [10, 6], [10, 5], [11, 5], [11, 4], [12, 4], ]
 
-        game_state.attempt_spawn(ENCRYPTOR, encryptors_locations)
+        for loc in encryptors_locations:
+            if game_state.get_resource(CORES, 0) < 12:
+                break
+            game_state.attempt_spawn(ENCRYPTOR, [loc])
+            game_state.attempt_upgrade([loc])
 
         bits = game_state.get_resource(BITS, 0)
         num_spawns = int(bits // 5)
@@ -259,12 +275,7 @@ class AlgoStrategy(gamelib.AlgoCore):
 
         if num_spawns >= 2:
             ping_locations = [[15, 1]]
-            if random.randint(0, 1) == 0:
-                emp_locations = [[14, 0]]
-                # ping_locations = [[15, 1]]
-            else:
-                emp_locations = [[13, 0]]
-                # ping_locations = [[13, 0]]
+            emp_locations = [[13, 0]]
             
             game_state.attempt_spawn(PING, ping_locations * 2 * num_spawns)
             game_state.attempt_spawn(EMP, emp_locations * num_spawns)
