@@ -106,17 +106,17 @@ class AlgoStrategy(gamelib.AlgoCore):
                 if x <= 9: 
                     if (x,y) in self.ptop_left_dict: 
                         self.ptop_left_dict[(x,y)] = self.ptop_left_dict[(x,y)] - hp
-                        temp_left[(x,y)] = hp
+                    temp_left[(x,y)] = hp
                 
                 elif x> 9 and x <= 18:
                     if (x,y) in self.pmid_dict: 
                             self.pmid_dict[(x,y)] = self.pmid_dict[(x,y)] - hp
-                            temp_mid[(x,y)] = hp
+                    temp_mid[(x,y)] = hp
 
                 else: 
-                     if (x,y) in self.ptop_right_dict:
+                    if (x,y) in self.ptop_right_dict:
                         self.ptop_right_dict[(x,y)] = self.ptop_right_dict[(x,y)] - hp
-                        temp_right[(x,y)] = hp
+                    temp_right[(x,y)] = hp
                 sumleft = self.sum(self.ptop_left_dict)
                 summid = self.sum(self.pmid_dict)
                 sumright = self.sum(self.ptop_right_dict)
