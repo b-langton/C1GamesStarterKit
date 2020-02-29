@@ -25,6 +25,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         seed = random.randrange(maxsize)
         random.seed(seed)
         gamelib.debug_write('Random seed: {}'.format(seed))
+        self.previous_game_states = {}
 
     def on_game_start(self, config):
         """ 
@@ -44,9 +45,6 @@ class AlgoStrategy(gamelib.AlgoCore):
         # This is a good place to do initial setup
         self.scored_on_locations = []
 
-    
-        
-
     def on_turn(self, turn_state):
         """
         This function is called every turn with the game state wrapper as
@@ -58,6 +56,8 @@ class AlgoStrategy(gamelib.AlgoCore):
         game_state = gamelib.GameState(self.config, turn_state)
         gamelib.debug_write('Performing turn {} of your custom algo strategy'.format(game_state.turn_number))
         game_state.suppress_warnings(True)  #Comment or remove this line to enable warnings.
+
+        self.previous_game_states[game_state.turn_number] = game_state
 
         self.v_strategy(game_state)
 
