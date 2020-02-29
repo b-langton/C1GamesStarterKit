@@ -71,6 +71,7 @@ class AlgoStrategy(gamelib.AlgoCore):
 
     def v_strategy(self, game_state):
         self.build_defences(game_state)
+        self.build_offenses(game_state)
     def starter_strategy(self, game_state):
         
         """
@@ -134,6 +135,11 @@ class AlgoStrategy(gamelib.AlgoCore):
       
         # upgrade filters so they soak more damage
         game_state.attempt_upgrade(upgrade_locations)
+
+    def build_offenses(self, game_state):
+        encryptors_locations = [[6, 10], [7, 9], [8, 8], [9, 7], [10, 6], [11, 5]]
+
+        game_state.attempt_spawn(ENCRYPTOR, encryptors_locations)
 
     def build_reactive_defense(self, game_state):
         """
