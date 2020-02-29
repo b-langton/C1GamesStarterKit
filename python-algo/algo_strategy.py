@@ -221,7 +221,7 @@ class AlgoStrategy(gamelib.AlgoCore):
             return
         
         if game_state.get_resource(BITS, 1) >= 10:
-            game_state.attempt_spawn(SCRAMBLER, [[6, 7]])
+            game_state.attempt_spawn(SCRAMBLER, [[5, 8]])
 
         encryptors_locations = [[5, 10], [6, 9], [7, 8], [8, 8], [8, 7], [9, 7], [9, 6], [10, 6], [10, 5], [11, 5], [11, 4], [12, 4]]
 
@@ -231,7 +231,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         num_spawns = int(bits // 5)
 
         reqd_spawns = 2 if game_state.get_resource(BITS, 1) >= 10 else 1
-        
+
         if num_spawns >= 2:
             ping_locations = [[15, 1]]
             if random.randint(0, 1) == 0:
