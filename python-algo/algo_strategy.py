@@ -235,13 +235,12 @@ class AlgoStrategy(gamelib.AlgoCore):
         if game_state.get_resource(BITS, 1) >= 10:
             game_state.attempt_spawn(SCRAMBLER, [[6, 7]])
 
-        encryptors_locations = [[5, 10], [6, 10], [6, 9], [7, 9], [7, 8], [8, 8], [8, 7], [9, 7], [9, 6], [10, 6], [10, 5], [11, 5], [11, 4], [12, 4]]
-
-        game_state.attempt_spawn(ENCRYPTOR, encryptors_locations)
+        encryptors_locations = [[5, 10], [6, 10], [6, 9], [7, 9], [7, 8], [8, 8], [8, 7], [9, 7], [9, 6], [10, 6], [10, 5], [11, 5], [11, 4], [12, 4], ]
 
         for loc in encryptors_locations:
-            if game_state.get_resource(CORES, 0) < 20:
+            if game_state.get_resource(CORES, 0) < 12:
                 break
+            game_state.attempt_spawn([loc])
             game_state.attempt_upgrade([loc])
 
         bits = game_state.get_resource(BITS, 0)
