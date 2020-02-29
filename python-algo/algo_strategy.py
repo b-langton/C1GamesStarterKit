@@ -104,17 +104,17 @@ class AlgoStrategy(gamelib.AlgoCore):
                 hp = float(shp)
                 # This depends on RM and UP always being the last types to be processed
                 if x <= 9: 
-                    if self.ptop_left_dict[(x,y)] != None: 
+                    if (x,y) in self.ptop_left_dict: 
                         self.ptop_left_dict[(x,y)] = self.ptop_left_dict[(x,y)] - hp
                         temp_left[(x,y)] = hp
                 
                 elif x> 9 and x <= 18:
-                    if self.pmid_dict[(x,y)] != None: 
+                    if (x,y) in self.pmid_dict: 
                             self.pmid_dict[(x,y)] = self.pmid_dict[(x,y)] - hp
                             temp_mid[(x,y)] = hp
 
                 else: 
-                     if self.ptop_right_dict[(x,y)] != None: 
+                     if (x,y) in self.ptop_right_dict:
                         self.ptop_right_dict[(x,y)] = self.ptop_right_dict[(x,y)] - hp
                         temp_right[(x,y)] = hp
                 sumleft = self.sum(self.ptop_left_dict)
