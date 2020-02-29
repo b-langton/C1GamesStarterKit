@@ -251,7 +251,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         for loc in encryptors_locations:
             if game_state.get_resource(CORES, 0) < 12:
                 break
-            game_state.attempt_spawn([loc])
+            game_state.attempt_spawn(ENCRYPTOR, [loc])
             game_state.attempt_upgrade([loc])
 
         bits = game_state.get_resource(BITS, 0)
