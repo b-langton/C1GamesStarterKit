@@ -23,6 +23,7 @@ class AlgoStrategy(gamelib.AlgoCore):
     pmid_dict = {}
     ptop_left_dict = {}
     ptop_right_dict = {}
+    last_adapted = ""
     def __init__(self):
         super().__init__()
         seed = random.randrange(maxsize)
@@ -73,6 +74,9 @@ class AlgoStrategy(gamelib.AlgoCore):
     """
 
     def v_strategy(self, game_state):
+
+        if game_state.turn_number == 0: 
+            game_state.attempt_spawn(SCRAMBLER, [18,4])
         state = json.loads(game_state.serialized_string)
         p1units = state["p1Units"]
         self.build_defences(game_state)
@@ -89,14 +93,16 @@ class AlgoStrategy(gamelib.AlgoCore):
     def sum(self, d):
         sum1 = 0 
         for num in d.values():
-            sum1 += int(num)
+            if num>0:
+                sum1 += int(num)
         return sum1
     def figure_out_attacked(self, game_state, units): 
-        
+        temp_right = {}
+        temp_mid = {}
+        temp_left = {}
         for i, unit_types in enumerate(units):
-            temp_right = {}
-            temp_mid = {}
-            temp_left = {}
+            gamelib.debug_write("i:",i, "unit_types:", unit_types, )
+            
             for uinfo in unit_types:
                 
                 sx, sy, shp = uinfo[:3]
@@ -117,29 +123,35 @@ class AlgoStrategy(gamelib.AlgoCore):
                     if (x,y) in self.ptop_right_dict:
                         self.ptop_right_dict[(x,y)] = self.ptop_right_dict[(x,y)] - hp
                     temp_right[(x,y)] = hp
-                sumleft = self.sum(self.ptop_left_dict)
-                summid = self.sum(self.pmid_dict)
-                sumright = self.sum(self.ptop_right_dict)
+        sumleft = self.sum(self.ptop_left_dict)
+        summid = self.sum(self.pmid_dict)
+        sumright = self.sum(self.ptop_right_dict)
 
-                self.pmid_dict = temp_mid
-                self.ptop_right_dict = temp_right
-                self.ptop_left_dict = temp_left
-                gamelib.debug_write(temp_left.keys(), temp_left.values())
+        self.pmid_dict = temp_mid
+        self.ptop_right_dict = temp_right
+        self.ptop_left_dict = temp_left
+        gamelib.debug_write(temp_left.keys(), temp_left.values())
+        gamelib.debug_write(sumleft, summid, sumright)
 
-                if sumright > summid and sumright > sumleft:
-                    gamelib.debug_write("top_right")
-                    return "top_right"
-                if summid > sumleft and summid > sumright: 
-                    gamelib.debug_write("mid")
-                    return "mid"
-                else:
-                    gamelib.debug_write("top_right")
-                    return "top_left"
+        if sumright > summid and sumright > sumleft and summid > 0:
+            gamelib.debug_write("top_right")
+            self.last_adapted = "top_right"
+            return "top_right"
+        elif summid > sumleft and summid > sumright and summid > 0: 
+            gamelib.debug_write("mid")
+            self.last_adapted = "mid"
+            return "mid"
+        elif sumleft > 0:
+            gamelib.debug_write("top_left")
+            self.last_adapted = "top_left"
+            return "top_left"
+        return "no damage taken"
                      
 
-                    
-        return "top_left"
+       
     def adapt(self, area,  game_state): 
+        if area == "no damage taken":
+            area = self.last_adapted
         if area == "top_left": 
             locations = [[2, 12], [4, 12], [1, 12], [4, 11], [5, 11], [7, 11]]
             game_state.attempt_spawn(DESTRUCTOR, locations, 2)
