@@ -98,6 +98,9 @@ class AlgoStrategy(gamelib.AlgoCore):
         area = self.figure_out_attacked(game_state, p1units)
         self.adapt(area, game_state)
         self.build_offenses(game_state)
+        if len(self.filters_to_upgrade) > 0:
+            self.filters_to_upgrade.sort(key=lambda t: t[1])
+            game_state.attempt_upgrade(self.filters_to_upgrade)
 
     def reinforce_defences(self, game_state): 
         locations = [[2, 11], [24, 11]]
@@ -254,10 +257,6 @@ class AlgoStrategy(gamelib.AlgoCore):
                 if game_state.can_spawn(FILTER, loc):
                     self.filters_to_upgrade.append(loc)
                     game_state.attempt_spawn(FILTER, [loc])
-
-        if len(self.filters_to_upgrade) > 0:
-            self.filters_to_upgrade.sort(key=lambda t: t[1])
-            game_state.attempt_upgrade(self.filters_to_upgrade)
 
         upgrade_locations = [[1, 13], [25, 13], [26, 13], [27, 13], [5, 12]]
       
