@@ -75,7 +75,19 @@ class AlgoStrategy(gamelib.AlgoCore):
     """
 
     def v_strategy(self, game_state):
+        x, y = map(int, [1,13])
+        for unit in game_state.game_map[x,y]:
+            if unit.health < 25:
+                game_state.attempt_remove([1,13])
+        x, y = map(int, [27,13])
+        for unit in game_state.game_map[x,y]:
+            if unit.health < 25:
+                game_state.attempt_remove([27,13])
 
+        for i in self.scored_on_locations:
+            if i  == [0,13]: 
+                game_state.attempt_spawn(FILTER, [0,13])
+                game_state.attempt_upgrade([0,13])
         if game_state.turn_number == 0: 
             game_state.attempt_spawn(SCRAMBLER, [18,4])
         state = json.loads(game_state.serialized_string)
@@ -93,6 +105,7 @@ class AlgoStrategy(gamelib.AlgoCore):
     
     def sum(self, d):
         sum1 = 0 
+                
         for num in d.values():
             if num>0:
                 sum1 += int(num)
@@ -156,7 +169,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         if area == "no damage taken":
             area = self.last_adapted
         if area == "top_left": 
-            locations = [[2, 12], [4, 12], [1, 12], [4, 11], [5, 11], [7, 11]]
+            locations = [[2, 12], [4, 12], [1, 12], [4, 11], [5, 11], [7, 11], [6,12]]
             filter_locations = [[6,11], [7,10], [8,9]]
             
             game_state.attempt_spawn(DESTRUCTOR, locations, 2)
@@ -171,10 +184,11 @@ class AlgoStrategy(gamelib.AlgoCore):
         if area == "top_right": 
             filter_locations = [[24,13], [23,13], [22,11], [23,12], [21,10]]
             locations = [[23, 12], [24, 12], [23, 11], [22, 10], [22, 9]]
-            game_state.attempt_spawn(DESTRUCTOR, locations, 2)
-            for i in filter_locations: 
-                game_state.attempt_spawn(FILTER, [i])
-                game_state.attempt_upgrade([i])
+           
+            for i in range(len(filter_locations)): 
+                game_state.attempt_spawn(DESTRUCTOR, [locations[i]])
+                game_state.attempt_spawn(FILTER, [filter_locations[i]])
+                game_state.attempt_upgrade(filter_locations[i])
 
        
 
@@ -192,8 +206,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         self.build_defences(game_state)
         # Now build reactive defenses based on where the enemy scored
         locations = [[11, 11], [13,11], [8,10], [4,10], [19,11]]
-        self.reinforce_defences(game_state, locations)
-
+        
        
     
         # Now let's analyze the enemy base to see where their defenses are concentrated.
