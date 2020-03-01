@@ -284,7 +284,7 @@ class AlgoStrategy(gamelib.AlgoCore):
         bits = game_state.get_resource(BITS, 0)
         num_spawns = int(bits // 5)
 
-        reqd_spawns = 4 if (game_state.turn_number > 30 and game_state.my_health > 25 and game_state.enemy_health > 25) else 2
+        reqd_spawns = 4 if (game_state.turn_number > 30 and game_state.enemy_health > 25) else 2
 
         if num_spawns >= reqd_spawns:
             ping_locations = [[15, 1]]
